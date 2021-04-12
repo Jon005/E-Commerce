@@ -1,0 +1,17 @@
+{% extends 'Store/main.html' %}
+
+{% load static %}
+
+{% block homeC %}
+<div class="row">
+    <div class="col-2">
+        <h1>What You Have Got In Mind,<br>We have Got Here.</h1>
+
+        <a href="{% url 'store' %}" class="btn">Explore Now &#8594;</a>
+    </div>
+    <div class="col-2">
+       <img src="#" max-width="100%" alt="image1">
+     </div>
+</div>
+
+{% endblock homeC %}

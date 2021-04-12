@@ -1,0 +1,119 @@
+Tabel:-
+Order = cart
+OrderedItem = cartitem
+
+Customer(firstname,lastname,ip,email,password,status,sactivationcode,forgotcode,forgotcodesenttime(datatime)) 
+
+Customer_add(Customer.id(int),completeaddress,phonenumber)
+
+Products(productname,productSlug,catagories.id(int),subcatagories.id(int),catagories.name,subcatagories.name,previewimg)  
+
+
+products_variations_options(product.id(int),variationname)   \\ like:color,size,weight
+products_variation_options_value(products_variations.id(int),variation_option_name,variationname) \\ like:small,medium,large,reg,green,blune,5kg,10kg
+
+products_combination(product.id(int),combination_string,sku,price(float),unique_string_id,availablestock(int))
+product_stocks(products_combination.id(int),totalstocks(int),unitprice(float),)
+
+
+catagories(catagoryname,catagoryicon)
+subcatagories(catagory.id(int),subcatagoryname)
+
+product_images(image_gallery.id(int),product_variation_value.id(int),isFeatures(bool))
+Image_gallery(small,medium,large)
+
+
+
+
+Order(Customer.id(int),date_ordered(datatime),complete(bool),transaction_id)
+OrderedItem(Order.id(int),product.id/products_combination.id,quantity(id),date_added(datatime))
+
+ShippingInfo(Customer.id(int),Order.id(int),address,city,state,zipcode,date_added(datatime))
+
+
+
+variations(variationname) \\for admin like:color,size,weight
+variation_options(variation_option_name,variations.id(int)) \\for admin like:small,medium,large,reg,green,blune,5kg,10kg
+
+
+Seller(firstname,lastname,email)
+Seller_add(Seller.id(int),completeaddress,phonenumber)
+
+Seller_product(Seller.id(int),Products.id(int),location)
+
+Remaining table: Geolocation()
+
+
+-----------------------------------------------Relations-------------------------------------
+1--> m
+m <--> m
+1 -- 1
+
+
+Customer --> Customer_add \\ ONE Customer can have MANY Address_details. 
+    pinaki --> Address_details 1: Newbarrackpur 
+               Address_details 2: Darjeeling
+
+
+Products <-- Catagories \\ ONE Catagories can have MANY Products.
+        Dennim Blue Shirt: Clothes
+        Polo Formal Shirt: Clothes
+
+
+Products <-- subcatagories \\ ONE subcatagories can have MANY Products.
+    Dennim Blue Shirt: Shirt
+    Polo Formal Shirt: Shirt
+
+Products --> products_variations_options \\ ONE products_variations_options can have MANY Products.
+    Dennim Blue Shirt: Color
+    Dennim Blue Shirt: Size
+    Polo Formal Shirt: Color
+    Polo Formal Shirt: Size
+
+Products --> products_combination  \\ ONE Products can have MANY products_combination.
+    Dennim Blue Shirt: Cloths,Shirt,Blue,large
+    Dennim Blue Shirt: Cloths,Shirt,Blue,small
+    Polo Formal Shirt: Cloths,Shirt,White,medium
+    Polo Formal Shirt: Cloths,Shirt,Black,medium
+
+products_combination -- product_stocks \\ ONE products_combination can have ONE product_stocks.
+    Dennim Blue Shirt_Cloths,Shirt,Blue,large : 2 stock,price 1500
+    Dennim Blue Shirt_Cloths,Shirt,Blue,small : 8 stock,price 1500
+    Polo Formal Shirt_Cloths,Shirt,White,medium :: 40 stock,price 1200
+    Polo Formal Shirt_Cloths,Shirt,Black,medium:: 6 stock,price 1800
+
+
+products_variations_options --> products_variations_option_value  \\ ONE products_variations_options can have MANY products_variation_options_value.
+    Color:Red,Black,White
+    Weight: 500grm,1kg,5kg.
+    Size: Small,medium,large
+    Cutting:Biriyani_piece,Chilicken_piece
+
+
+Customer --> Order
+
+Order --> OrderedItem
+product --> OrderedItem
+
+Order --> ShippingAddress
+customer --> ShippingAddress
+
+image_gallery-->product_image
+products_variations_option_value --> product_images
+
+
+
+Catagories --> subcatagories \\ ONE Catagories can have MANY subcatagories.
+        Clothes: Shirt,Pant,saree.
+        Groceries: Oil,Biscuit,Rice.
+        Personal care: Body_spray,Face_wash,Nail_Pollish.
+        Food: Biriyani,Momo.
+        Fish & Meat : Fish1, Fish2, Meat1, Meat2
+
+
+
+
+\\For ADMIN
+variations --> variation_options \\ ONE variations can have MANY variation_options.
+    Color: Red,Green,White,Blue
+    weight:10kg,5kg,500grm

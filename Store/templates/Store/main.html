@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <title>WhatDoYouWant</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+    <script type="text/javascript">
+        var user = '{{request.user}}'
+        function getToken(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getToken('csrftoken');
+
+        function getCookie(name){
+            var cookieArr = document.cookie.split(";");
+
+            for(var i = 0; i<cookieArr.length; i++){
+                var cookiePair = cookieArr[i].split("=");
+
+                if(name == cookiePair[0].trim()){
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+            return null;
+        }
+
+        var cart = JSON.parse(getCookie('cart'))
+        if(cart == undefined){
+            cart ={}
+            console.log('Cart was created')
+            document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+        }
+
+        
+        console.log('Cart:',cart)
+    </script>
+
+    
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <a href="{% url 'home' %}"><img src="{% static 'images/photo_2020-08-30_16-35-42.jpg' %}" width="100px"></a>
+                </div>
+                <nav>
+                    <ul id="MenuItems">
+                        <li><a href="{% url 'store' %}">Store</a></li>
+                        <li><a href="#">Login</a></li>
+                    </ul>
+                </nav>
+                <a href="{% url 'cart' %}" class="btn">Cart</a>
+                <p id="cart-total">{{cartItems}}</p>
+            
+            </div>
+            {% block homeC %}
+
+            {% endblock homeC %}
+        </div>
+    </div>
+
+    <hr>
+
+     <div class="container">
+            <br>
+            {% block content %}
+
+
+             {% endblock content %}
+     </div>
+     <script type="text/javascript" src ="{% static 'js/cart.js' %}"></script>
+</body>
+</html>
